@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using auth_cs_gregslist.Repositories;
+using auth_cs_gregslist.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -59,8 +61,12 @@ namespace auth_cs_gregslist
       services.AddControllers();
 
       // NOTE Transient Services
+      services.AddTransient<AccountsService>();
+      services.AddTransient<CarsService>();
 
       // NOTE Transient Repo's 
+      services.AddTransient<AccountsRepository>();
+      services.AddTransient<CarsRepository>();
 
 
       // TODO[epic=DB] database Connection

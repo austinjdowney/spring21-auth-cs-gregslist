@@ -1,0 +1,25 @@
+/* CREATE TABLE accounts (
+   id VARCHAR(255) NOT NULL,
+   name VARCHAR(255) NOT NULL,
+   email VARCHAR(255) NOT NULL,
+   picture VARCHAR(255) NOT NULL,
+   PRIMARY KEY (id)
+);
+
+
+CREATE TABLE cars (
+  id INT NOT NULL AUTO_INCREMENT,
+  creatorId VARCHAR(255) NOT NULL,
+  make VARCHAR(255) NOT NULL,
+  model VARCHAR(255) NOT NULL,
+  year INT NOT NULL,
+  price DECIMAL(10, 2) NOT NULL,
+  description VARCHAR(255) NOT NULL,
+  imgUrl VARCHAR(255) NOT NULL,
+
+  PRIMARY KEY (id),
+
+  FOREIGN KEY (creatorId)
+    REFERENCES accounts (id)
+    ON DELETE CASCADE
+); */
