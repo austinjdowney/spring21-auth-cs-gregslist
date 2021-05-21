@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using auth_cs_gregslist.Models;
 using Dapper;
 
@@ -15,24 +16,55 @@ namespace auth_cs_gregslist.Repositories
       _db = db;
     }
 
-    internal IEnumerable<Car> GetAll()
+    public IEnumerable<Car> GetAll()
     {
-      string sql = "SELECT * FROM cars";
-      return _db.Query<Car>(sql);
+      string sql = @"
+      SELECT
+       c.*,
+       a.*
+      FROM cars c
+      JOIN accounts a ON c.creatorId = a.id;";
+      return _db.Query<Car, Account, Car>(sql, (car, account) =>
+      {
+        car.Creator = account;
+        return car;
+      }, splitOn: "id");
     }
 
-    internal IEnumerable<Car> GetByCreatorId(string id)
+    public IEnumerable<Car> GetByCreatorId(string id)
     {
-      string sql = "SELECT * FROM cars WHERE creatorId = @id";
-      return _db.Query<Car>(sql, new { id });
+      string sql = @"
+      SELECT 
+        c.*,
+        a.* 
+      FROM cars c
+      JOIN accounts a ON c.creatorId = a.id
+      WHERE creatorId = @id";
+      return _db.Query<Car, Account, Car>(sql, (car, account) =>
+      {
+        car.Creator = account;
+        return car;
+      }
+      , new { id }, splitOn: "id");
     }
-    internal Car GetById(int id)
+    public Car GetById(int id)
     {
-      string sql = "SELECT * FROM cars WHERE id = @id";
-      return _db.QueryFirstOrDefault<Car>(sql, new { id });
+      string sql = @"
+      SELECT 
+        c.*,
+        a.* 
+      FROM cars c
+      JOIN accounts a ON c.creatorId = a.id
+      WHERE id = @id";
+      return _db.Query<Car, Account, Car>(sql, (car, account) =>
+      {
+        car.Creator = account;
+        return car;
+      }
+      , new { id }, splitOn: "id").FirstOrDefault();
     }
 
-    internal Car Create(Car newCar)
+    public Car Create(Car newCar)
     {
       string sql = @"
       INSERT INTO cars
@@ -44,7 +76,7 @@ namespace auth_cs_gregslist.Repositories
       return newCar;
     }
 
-    internal bool Delete(int id)
+    public bool Delete(int id)
     {
       string sql = "DELETE FROM cars WHERE id = @id LIMIT 1";
       int affectedRows = _db.Execute(sql, new { id });

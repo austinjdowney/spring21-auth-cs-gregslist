@@ -6,6 +6,8 @@ namespace auth_cs_gregslist.Models
   {
     public int Id { get; set; }
     public string CreatorId { get; set; }
+    // TODO[epic=Populate]
+    public Account Creator { get; set; }
 
     [Required]
     public string Make { get; set; }

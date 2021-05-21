@@ -63,10 +63,12 @@ namespace auth_cs_gregslist.Controllers
         // TODO[epic=Auth] Get the user info to set the creatorID
         Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
         // safety to make sure an account exists for that user before CREATE-ing stuff.
-        _acctService.GetOrCreateAccount(userInfo);
+        Account fullAccount = _acctService.GetOrCreateAccount(userInfo);
         newCar.CreatorId = userInfo.Id;
 
         Car car = _service.Create(newCar);
+        //TODO[epic=Populate] adds the account to the new object as the creator
+        car.Creator = fullAccount;
         return Ok(car);
       }
       catch (Exception e)
