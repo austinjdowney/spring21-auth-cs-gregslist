@@ -95,9 +95,5 @@ namespace auth_cs_gregslist.Controllers
         return BadRequest(e.Message);
       }
     }
-
-
-
-
   }
 }
